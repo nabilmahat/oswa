@@ -1,3 +1,14 @@
+<?php
+include 'app/connection/connection.php';
+
+if(isset($_GET['survey_id'])) {
+  $surveyID = $_GET['survey_id'];
+} else {
+  echo "<script> alert('Invalid survey link');";
+  echo "location.href = 'index.php';";
+  echo "</script>";
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -39,43 +50,36 @@
         <div class="register-box-body">
             <p class="login-box-msg">Register</p>
 
-            <form action="app/module/userRegister.php" method="post">
+            <form action="app/module/surveyUserRegister.php" method="post">
+            <input type="hidden" class="form-control" placeholder="Full name" name="survey_id" value="<?php echo $surveyID; ?>">
                 <div class="form-group has-feedback">
+                    <label for="name">Name</label>
                     <input type="text" class="form-control" placeholder="Full name" name="name" required>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Contact No" name="contact_number" required>
-                    <span class="glyphicon glyphicon-phone form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Address" name="address" required>
-                    <span class="glyphicon glyphicon-home form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
+                    <label for="email">Email</label>
                     <input type="email" class="form-control" placeholder="Email" name="email" required>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
-                <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required>
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Retype password" name="confirm_password" required>
-                    <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option selected disabled='' value="">Please select</option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
                 </div>
                 <div class="row">
-                    <div class="col-xs-8">
-                    </div>
+                    <!-- <div class="col-xs-8">
+                    </div> -->
                     <!-- /.col -->
-                    <div class="col-xs-4">
+                    <div class="col-xs-12">
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
                     </div>
                     <!-- /.col -->
                 </div>
             </form>
-
-            <a href="login.php" class="text-center">I already have an account</a>
         </div>
         <!-- /.form-box -->
     </div>

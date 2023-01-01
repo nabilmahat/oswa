@@ -47,14 +47,15 @@ $execUserData = mysqli_query($conn, $userData);
                                     echo '<td>'.$row['name'].'</td>';
                                     echo '<td>'.$row['contact_number'].'</td>';
                                     if ($row['role']==1)
-                                    echo '<td>Admin</td>';
+                                        echo '<td>Admin</td>';
                                     else
-                                    echo '<td>User</td>';
+                                        echo '<td>User</td>';
                                     echo '<td>'.$row['email'].'</td>';
                                     echo '<td>';
                                     echo '<a href="userView.php?id='.$row['id'].'" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>';
                                     echo '<a href="userUpdate.php?id='.$row['id'].'" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>';
-                                    echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>';
+                                    if($row['id']!=$_SESSION['user_id'])
+                                        echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete" onclick="deleteUser('.$row['id'].')"><i class="fa fa-trash-o "></i></button>';
                                     echo '</td>';
                                     echo '</tr>';
                                 }
@@ -75,3 +76,15 @@ $execUserData = mysqli_query($conn, $userData);
 <?php
 include 'include/footer.php';
 ?>
+
+<script>
+function deleteUser(user_id) {
+  let text;
+  if (confirm("Delete user?") == true) {
+    text = "You pressed OK!";
+    location.href = 'module/userDelete.php?id='+user_id;
+  } else {
+    text = "You canceled!";
+  }
+}
+</script>

@@ -1,11 +1,11 @@
 <?php
 include 'include/header.php';
 
-$userData = "SELECT COUNT(id) as totalUser FROM users";
+$userData = "SELECT * FROM users";
 $execUserData = mysqli_query($conn, $userData);
 $userNum = mysqli_num_rows($execUserData);
 
-$surveyData = "SELECT COUNT(id) as totalUser FROM users";
+$surveyData = "SELECT * FROM surveys";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 
@@ -33,7 +33,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
           <div class="small-box bg-red">
             <div class="inner">
               <h3>
-                <?php echo $userNum ?>
+                <?php echo mysqli_num_rows($execUserData) ?>
               </h3>
 
               <p>Total Users</p>
@@ -50,7 +50,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
           <div class="small-box bg-green">
             <div class="inner">
               <h3>
-                <?php echo $surveyNum ?>
+                <?php echo mysqli_num_rows($execSurveyData) ?>
               </h3>
 
               <p>Total Survey</p>

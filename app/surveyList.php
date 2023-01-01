@@ -1,5 +1,9 @@
 <?php
 include 'include/header.php';
+
+$surveyData = "SELECT * FROM surveys";
+$execSurveyData = mysqli_query($conn, $surveyData);
+$surveyNum = mysqli_num_rows($execSurveyData);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -30,69 +34,29 @@ include 'include/header.php';
                         <table id="user-list" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Contact No</th>
-                                    <th>Role</th>
-                                    <th>Email</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Start</th>
+                                    <th>End</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Admin 1 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyView.php?id=" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
-                                        <a href="surveyUpdate.php?id=" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Admin 2 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyView.php?id=" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
-                                        <a href="surveyUpdate.php?id=" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 1 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyView.php?id=" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
-                                        <a href="surveyUpdate.php?id=" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 2 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyView.php?id=" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
-                                        <a href="surveyUpdate.php?id=" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 3 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyView.php?id=" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
-                                        <a href="surveyUpdate.php?id=" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete"><i class="fa fa-trash-o "></i></button>
-                                    </td>
-                                </tr>
+                                <?php
+                                    foreach ($execSurveyData as $data) {
+                                        echo '<tr>';
+                                        echo '<td>'.$data["title"].'</td>';
+                                        echo '<td>'.$data["description"].'</td>';
+                                        echo '<td>'.date_format(date_create($data['start_date']),"M d, Y").'</td>';
+                                        echo '<td>'.date_format(date_create($data['end_date']),"M d, Y").'</td>';
+                                        echo '<td>';
+                                        echo '<a href="surveyView.php?id='.$data["id"].'" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>';
+                                        echo '<a href="surveyUpdate.php?id='.$data["id"].'" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>';
+                                        echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete" onclick="deleteSurvey('.$data['id'].')"><i class="fa fa-trash-o "></i></button>';
+                                        echo '</td>';
+                                        echo '</tr>';
+                                    }
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -109,3 +73,15 @@ include 'include/header.php';
 <?php
 include 'include/footer.php';
 ?>
+
+<script>
+function deleteSurvey(survey_id) {
+  let text;
+  if (confirm("Delete survey?") == true) {
+    text = "You pressed OK!";
+    location.href = 'module/surveyDelete.php?id='+survey_id;
+  } else {
+    text = "You canceled!";
+  }
+}
+</script>

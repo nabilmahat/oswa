@@ -28,52 +28,52 @@ include 'include/header.php';
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form">
+                    <form role="form" action="module/userAdd.php" method="post">
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <input type="text" class="form-control" id="name"
+                                    placeholder="Enter name" name="name" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Contact Number</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <input type="text" class="form-control" id="contact_number"
+                                    placeholder="Enter contact number" name="contact_number" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Address</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <input type="text" class="form-control" id="address"
+                                    placeholder="Enter address" name="address" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">User Role</label>
-                                <select class="form-control">
-                                    <option selected disabled=''>Please select</option>
-                                    <option>Admin</option>
-                                    <option>User</option>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option selected disabled='' value="">Please select</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">User</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <input type="email" class="form-control" id="email"
+                                    placeholder="Enter email" name="email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Password">
+                                <input type="password" class="form-control" id="password"
+                                    placeholder="Password" name="password" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Confirm Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Confirm Password">
+                                <input type="password" class="form-control" id="confirm_password"
+                                    placeholder="Confirm Password" name="confirm_password" required>
                             </div>
                         </div>
                         <!-- /.box-body -->
 
                         <div class="box-footer text-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="submit" class="btn btn-danger">Cancel</button>
+                            <a href="userList.php" class="btn btn-danger">Cancel</a>
                         </div>
                     </form>
                 </div>

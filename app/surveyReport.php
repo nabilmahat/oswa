@@ -1,5 +1,9 @@
 <?php
 include 'include/header.php';
+
+$surveyData = "SELECT * FROM surveys";
+$execSurveyData = mysqli_query($conn, $surveyData);
+$surveyNum = mysqli_num_rows($execSurveyData);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -30,59 +34,29 @@ include 'include/header.php';
                         <table id="user-list" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Contact No</th>
-                                    <th>Role</th>
-                                    <th>Email</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Respond(s)</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Admin 1 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyDetail.php?id=" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Admin 2 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyDetail.php?id=" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 1 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyDetail.php?id=" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 2 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyDetail.php?id=" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>User 3 OSWA</td>
-                                    <td>0148976444</td>
-                                    <td>Admin</td>
-                                    <td>admin@oswa.com</td>
-                                    <td>
-                                        <a href="surveyDetail.php?id=" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>
-                                    </td>
-                                </tr>
+                                <?php
+                                    foreach ($execSurveyData as $data) {
+                                        echo '<tr>';
+                                        echo '<td>'.$data["title"].'</td>';
+                                        echo '<td>'.$data["description"].'</td>';
+                                        echo '<td>'.date_format(date_create($data['start_date']),"M d, Y").'</td>';
+                                        echo '<td>'.date_format(date_create($data['end_date']),"M d, Y").'</td>';
+                                        echo '<td>100</td>';
+                                        echo '<td>';
+                                        echo '<a href="surveyDetail.php?id='.$data['id'].'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>';
+                                        echo '</td>';
+                                        echo '</tr>';
+                                    }
+                                ?>
                             </tbody>
                         </table>
                     </div>

@@ -28,12 +28,16 @@ include 'include/header.php';
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form">
+                    <form role="form" action="module/surveyAdd.php" method="post">
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Title</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <input type="text" class="form-control" id="title"
+                                    placeholder="Enter title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Description</label>
+                                <textarea class="form-control" cols="30" rows="10" id="description" name="description" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Date Start:</label>
@@ -42,7 +46,7 @@ include 'include/header.php';
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="datepickerStart">
+                                    <input type="text" class="form-control pull-right" id="datepickerStart" name="start_date" required>
                                 </div>
                                 <!-- /.input group -->
                             </div>
@@ -53,20 +57,16 @@ include 'include/header.php';
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="datepickerEnd">
+                                    <input type="text" class="form-control pull-right" id="datepickerEnd" name="end_date" required>
                                 </div>
                                 <!-- /.input group -->
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Description</label>
-                                <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
                             </div>
                         </div>
                         <!-- /.box-body -->
 
                         <div class="box-footer text-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="submit" class="btn btn-danger">Cancel</button>
+                            <a href="surveyList.php" class="btn btn-danger">Cancel</a>
                         </div>
                     </form>
                 </div>

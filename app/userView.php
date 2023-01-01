@@ -1,5 +1,18 @@
 <?php
 include 'include/header.php';
+
+if (isset($_GET['id'])){
+    $userID = $_GET['id'];
+} else {
+    echo "<script>";
+	echo "location.href = 'userList.php';";
+	echo "</script>";
+}
+
+$userData = "SELECT * FROM users WHERE id = '".$userID."'";
+$execUserData = mysqli_query($conn, $userData);
+$data = mysqli_fetch_array($execUserData);
+
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -32,40 +45,33 @@ include 'include/header.php';
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <p>
+                                    <?php echo $data['name']; ?>
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Contact Number</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <p>
+                                    <?php echo $data['contact_number']; ?>
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Address</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
+                                <p>
+                                    <?php echo $data['address']; ?>
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">User Role</label>
-                                <select disabled="" class="form-control">
-                                    <option>Admin</option>
-                                    <option>User</option>
-                                </select>
+                                <p>
+                                    <?php if ($data['role'] == 1) echo 'Admin'; else echo 'User';?>
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                    placeholder="Enter email">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Confirm Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Confirm Password">
+                                <p>
+                                    <?php echo $data['email']; ?>
+                                </p>
                             </div>
                         </div>
                         <!-- /.box-body -->

@@ -20,9 +20,11 @@ if($count==1){
 
     $username = $row['name'];
     $user_role = $row['role'];
+    $user_id = $row['id'];
 
 	// set username session
 	$_SESSION['name'] = $username;
+	$_SESSION['user_id'] = $user_id;
 
   	if($user_role=='1'){
     	

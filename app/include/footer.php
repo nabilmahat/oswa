@@ -62,10 +62,12 @@
   })
   //Date picker
   $('#datepickerStart').datepicker({
-      autoclose: true
+      autoclose: true,
+      dateFormat:'YYYY-MM-DD',
     })
   $('#datepickerEnd').datepicker({
-      autoclose: true
+      autoclose: true,
+      dateFormat:'YYYY-MM-DD',
     })
 </script>
 <!-- ChartJS -->
