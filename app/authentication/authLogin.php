@@ -34,6 +34,14 @@ if($count==1){
         echo "<script> alert('Successfully Login');";
 		echo "location.href = '../index.php';";
 		echo "</script>"; 
+    } else if($user_role=='2'){
+    	
+        // set user_role session
+    	$_SESSION['role'] = $user_role;
+    	// echo "success";
+        echo "<script> alert('Successfully Login');";
+		echo "location.href = '../index.php';";
+		echo "</script>"; 
     }
 }
 else

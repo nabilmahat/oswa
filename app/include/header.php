@@ -151,6 +151,11 @@ include "connection/connection.php";
                             <li><a href="surveyReport.php"><i class="fa fa-circle-o"></i> Analysis Requirement</a></li>
                         </ul>
                     </li>
+                    <li class=" ">
+                        <a href="questionList.php">
+                            <i class="fa fa-question"></i> Question Pool
+                        </a>
+                    </li>
                 </ul>
             </section>
             <!-- /.sidebar -->

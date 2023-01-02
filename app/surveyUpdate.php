@@ -20,6 +20,9 @@ $end_date = date_format($rawEnd,"m/d/Y");
 
 $questionData = "SELECT * FROM questions WHERE survey_id = '".$surveyID."' ORDER BY id ASC";
 $execQuestionData = mysqli_query($conn, $questionData);
+
+$questionPoolsData = "SELECT * FROM questionpools WHERE questionpools.title NOT IN (SELECT questions.title FROM questions WHERE questions.survey_id = '".$surveyID."') ORDER BY id ASC";
+$execQuestionPoolsData = mysqli_query($conn, $questionPoolsData);
 // $dataQ = mysqli_fetch_array($execQuestionData);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -41,70 +44,146 @@ $execQuestionData = mysqli_query($conn, $questionData);
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <!-- Survey Preview -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <!-- Update Survey -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Update Survey</h3>
+                        <h3 class="box-title">Survey Details</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form" action="module/surveyUpdate.php" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Title</label>
+                            <input type="hidden" class="form-control" id="survey_id" placeholder="Enter title"
+                                name="survey_id" required value="<?php echo $surveyID; ?>">
+                            <input type="text" class="form-control" id="title" placeholder="Enter title" name="title"
+                                required value="<?php echo $data['title']; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Description</label>
+                            <textarea class="form-control" cols="30" rows="10" id="description" name="description"
+                                required readonly><?php echo $data['description']; ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Start:</label>
+
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepickerStart"
+                                    name="start_date" required value="<?php echo $start_date; ?>" disabled="">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="form-group">
+                            <label>Date End:</label>
+
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepickerEnd" name="end_date"
+                                    required value="<?php echo $end_date; ?>" disabled="">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!-- Survey Preview -->
+
+            <!-- form start -->
+            <form role="form" action="module/questionAdd2.php" method="post">
+                <div class="col-md-4 connectedSortable">
+                    <?php
+                    $countQ = 1;
+                    foreach($execQuestionData as $qRow) {
+                        
+                        $optionData = "SELECT * FROM options WHERE qID = '".$qRow['qID']."' ORDER BY id ASC";
+                        $execOptionData = mysqli_query($conn, $optionData);
+                        ?>
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Question <?php //echo $countQ ?></h3>
+                            <input type="hidden" name="qID[]" value="<?php echo $qRow['qID']; ?>">
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Title</label>
-                                <input type="hidden" class="form-control" id="survey_id"
-                                    placeholder="Enter title" name="survey_id" required value="<?php echo $surveyID; ?>">
-                                <input type="text" class="form-control" id="title"
-                                    placeholder="Enter title" name="title" required value="<?php echo $data['title']; ?>">
+                                <p>
+                                    <?php
+                                            echo $qRow['title'];
+                                        ?>
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Description</label>
-                                <textarea class="form-control" cols="30" rows="10" id="description" name="description" required><?php echo $data['description']; ?></textarea>
+                                <p>
+                                    <?php
+                                            echo $qRow['description'];
+                                        ?>
+                                </p>
                             </div>
+                            <?php
+                                foreach($execOptionData as $oRow) {
+                                        if($qRow['type']==1) {
+                                ?>
                             <div class="form-group">
-                                <label>Date Start:</label>
-
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" class="form-control pull-right" id="datepickerStart" name="start_date" required value="<?php echo $start_date; ?>">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+                                        <?php echo $oRow['title']; ?>
+                                        <!-- <br> -->
+                                        <?php // echo $oRow['description']; ?>
+                                    </label>
                                 </div>
-                                <!-- /.input group -->
                             </div>
+                            <?php
+                                } else {
+                                ?>
                             <div class="form-group">
-                                <label>Date End:</label>
-
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" class="form-control pull-right" id="datepickerEnd" name="end_date" required value="<?php echo $end_date; ?>">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="optionsRadios" id="optionsRadios1" value="option1">
+                                        <?php echo $oRow['title']; ?>
+                                        <!-- <br> -->
+                                        <?php // echo $oRow['description']; ?>
+                                    </label>
                                 </div>
-                                <!-- /.input group -->
                             </div>
+                            <?php    
+                                }
+                            }
+                                ?>
                         </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer text-center">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
-                </div>
-                <?php
-                $countQ = 1;
-                foreach($execQuestionData as $qRow) {
-                    
-                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['id']."' ORDER BY id ASC";
-                    $execOptionData = mysqli_query($conn, $optionData);
+                    </div>
+                    <?php
+                    $countQ++;
+                    }
                     ?>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-sm btn-success">Generate Survey</button>
+                    </div>
+                </div>
+            </form>
+            <!-- Survey Creation -->
+            <div class="col-md-4 connectedSortable">
+                <?php
+                    $countQ = 1;
+                    foreach($execQuestionPoolsData as $qPRow) {
+                        
+                        $optionPoolsData = "SELECT * FROM optionpools WHERE qID = '".$qPRow['qID']."' ORDER BY id ASC";
+                        $execOptionPoolsData = mysqli_query($conn, $optionPoolsData);
+                        ?>
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Question <?php echo $countQ ?></h3>
-                        <div class="box-tools pull-right">
-                            <?php echo '<button type="button" class="btn btn-sm btn-danger" onclick="deleteQuestion('.$qRow['id'].','.$data['id'].')">Delete</button>'; ?>
-                        </div>
+                        <h3 class="box-title">Question <?php // echo $countQ ?></h3>
+                            <input type="hidden" name="qID[]" value="<?php echo $qPRow['qID']; ?>">
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -113,118 +192,55 @@ $execQuestionData = mysqli_query($conn, $questionData);
                             <label for="exampleInputEmail1">Title</label>
                             <p>
                                 <?php
-                                        echo $qRow['title'];
-                                    ?>
+                                            echo $qPRow['title'];
+                                        ?>
                             </p>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Description</label>
                             <p>
                                 <?php
-                                        echo $qRow['description'];
-                                    ?>
+                                            echo $qPRow['description'];
+                                        ?>
                             </p>
                         </div>
                         <?php
-                            foreach($execOptionData as $oRow) {
-                                    if($qRow['type']==1) {
-                            ?>
+                                foreach($execOptionPoolsData as $oPRow) {
+                                        if($qPRow['type']==1) {
+                                ?>
                         <div class="form-group">
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-                                    <?php echo $oRow['title']; ?>
+                                    <?php echo $oPRow['title']; ?>
                                     <!-- <br> -->
                                     <?php // echo $oRow['description']; ?>
                                 </label>
                             </div>
                         </div>
                         <?php
-                            } else {
-                            ?>
+                                } else {
+                                ?>
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="optionsRadios" id="optionsRadios1" value="option1">
-                                    <?php echo $oRow['title']; ?>
+                                    <?php echo $oPRow['title']; ?>
                                     <!-- <br> -->
                                     <?php // echo $oRow['description']; ?>
                                 </label>
                             </div>
                         </div>
                         <?php    
+                                }
                             }
-                        }
-                            ?>
+                                ?>
                     </div>
                 </div>
                 <?php
-                $countQ++;
-                }
-                ?>
-            </div>
-            <!-- Survey Creation -->
-            <div class="col-md-6">
-                <!-- New Question -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">New Question</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form role="form" action="module/questionAdd.php" method="post">
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <input type="hidden" class="form-control" id="survey_id" placeholder="Enter title"
-                                    name="survey_id" required value="<?php echo $surveyID; ?>">
-                                <input type="text" class="form-control" id="title" placeholder="Enter title"
-                                    name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Description</label>
-                                <input type="text" class="form-control" id="description" placeholder="Enter description"
-                                    name="description" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Question Type</label>
-                                <select class="form-control" name="type" required>
-                                    <option selected disabled='' value="">Please select</option>
-                                    <option value="1">Single Answer</option>
-                                    <option value="2">Multiple Answer</option>
-                                </select>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <label for="exampleInputEmail1">Option</label>
-                                </div>
-                                <div id="p_scents" class="form-group">
-                                    <div id="1">
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" placeholder="Enter option" name="option[]" required>
-                                        </div>
-                                        <!-- <div class="col-md-5">
-                                            <input type="text" class="form-control" placeholder="Enter option description" name="optionD[]" required>
-                                        </div> -->
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="remove(1)">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                            </div>
-                            <button type="button" class="btn btn-primary" id="addScnt">Add Answer</button>
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="submit" class="btn btn-danger">Cancel</button>
-                        </div>
-                    </form>
-                </div>
+                    $countQ++;
+                    }
+                    ?>
             </div>
         </div>
         <!-- /.row -->
@@ -239,12 +255,12 @@ include 'include/footer.php';
 <script src="dist/js/addInput.js"></script>
 <script>
 function deleteQuestion(qID, sID) {
-  let text;
-  if (confirm("Delete question?") == true) {
-    text = "You pressed OK!";
-    location.href = 'module/questionDelete.php?id='+qID+'&&sid='+sID;
-  } else {
-    text = "You canceled!";
-  }
+    let text;
+    if (confirm("Delete question?") == true) {
+        text = "You pressed OK!";
+        location.href = 'module/questionDelete.php?id=' + qID + '&&sid=' + sID;
+    } else {
+        text = "You canceled!";
+    }
 }
 </script>

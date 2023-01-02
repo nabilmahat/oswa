@@ -1,11 +1,11 @@
 var count = 0;
 var id = 0;
 $(function () {
-    var scntDiv = $('#p_scents');
-    count = scntDiv.length + 1;
-    id = scntDiv.length + 1;
-    console.log(count);
-    console.log(id);
+    const box = document.getElementById('p_scents');
+    const direct = box.children.length;
+    
+    count = direct;
+    id = direct;
 
     $('#addScnt').click(function () {
         $('<div id="' + id + '" > '+
@@ -16,7 +16,7 @@ $(function () {
             // '<input type="text" class="form-control" ' +
             // 'placeholder="Enter option description" name="optionD[]" required></div> ' +
             '<div class="col-md-2"> <button type="submit" ' +
-            'class="btn btn-danger" onclick="remove(' + id + ')">Delete</button> </div></div>').appendTo(scntDiv);
+            'class="btn btn-danger" onclick="remove(' + id + ')">Delete</button> </div></div>').appendTo(box);
         count++;
         id++;
         return false;
@@ -24,7 +24,7 @@ $(function () {
 });
 
 function remove(param) {
-    if (count > 2) {
+    if (count > 1) {
         document.getElementById(param).remove();
         count--;
     }

@@ -31,7 +31,7 @@ if ($surveyRow < 1) {
     echo "alert('Success Update Survey');";
     echo "console.log(".$start_date.");";
     echo "console.log(".$end_date.");";
-    echo "location.href = '../surveyUpdate.php?id=$surveyID';";
+    echo "location.href = '../surveyView.php?id=$surveyID';";
     echo "</script>";
 }
     

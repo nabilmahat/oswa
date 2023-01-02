@@ -13,6 +13,11 @@ $surveyData = "SELECT * FROM surveys WHERE id = '".$surveyID."'";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $data = mysqli_fetch_array($execSurveyData);
 
+$rawStart=date_create($data["start_date"]);
+$start_date = date_format($rawStart,"m/d/Y");
+$rawEnd=date_create($data["end_date"]);
+$end_date = date_format($rawEnd,"m/d/Y");
+
 $questionData = "SELECT * FROM questions WHERE survey_id = '".$surveyID."' ORDER BY id ASC";
 $execQuestionData = mysqli_query($conn, $questionData);
 ?>
@@ -36,53 +41,58 @@ $execQuestionData = mysqli_query($conn, $questionData);
         <div class="row">
             <!-- left column -->
             <div class="col-md-6">
-                <!-- general form elements -->
+                <!-- Update Survey -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Survey Detail</h3>
+                        <h3 class="box-title">Update Survey</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form">
+                    <form role="form" action="module/surveyUpdate.php" method="post">
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Title</label>
-                                <p>
-                                    <?php
-                                        echo $data['title'];
-                                    ?>
-                                </p>
+                                <input type="hidden" class="form-control" id="survey_id"
+                                    placeholder="Enter title" name="survey_id" required value="<?php echo $surveyID; ?>">
+                                <input type="text" class="form-control" id="title"
+                                    placeholder="Enter title" name="title" required value="<?php echo $data['title']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Description</label>
-                                <p>
-                                    <?php
-                                        echo $data['description'];
-                                    ?>
-                                </p>
+                                <textarea class="form-control" cols="30" rows="10" id="description" name="description" required><?php echo $data['description']; ?></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Date Start:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['start_date']),"M d, Y");
-                                    ?>
-                                </p>
+
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="datepickerStart" name="start_date" required value="<?php echo $start_date; ?>">
+                                </div>
                                 <!-- /.input group -->
                             </div>
                             <div class="form-group">
                                 <label>Date End:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['end_date']),"M d, Y");
-                                    ?>
-                                </p>
+
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="datepickerEnd" name="end_date" required value="<?php echo $end_date; ?>">
+                                </div>
                                 <!-- /.input group -->
                             </div>
                         </div>
                         <!-- /.box-body -->
+
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
                     </form>
                 </div>
+            </div>
+            <div class="col-md-6">
                 <?php
                 $countQ = 1;
                 foreach($execQuestionData as $qRow) {
@@ -151,55 +161,6 @@ $execQuestionData = mysqli_query($conn, $questionData);
                 }
                 ?>
             </div>
-            <div class="col-md-6">
-                <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Survey Detail</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form role="form">
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <p>
-                                    <?php
-                                        echo $data['title'];
-                                    ?>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Description</label>
-                                <p>
-                                    <?php
-                                        echo $data['description'];
-                                    ?>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label>Date Start:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['start_date']),"M d, Y");
-                                    ?>
-                                </p>
-                                <!-- /.input group -->
-                            </div>
-                            <div class="form-group">
-                                <label>Date End:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['end_date']),"M d, Y");
-                                    ?>
-                                </p>
-                                <!-- /.input group -->
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-                    </form>
-                </div>
-            </div>
         </div>
         <!-- /.row -->
 
@@ -208,12 +169,5 @@ $execQuestionData = mysqli_query($conn, $questionData);
 </div>
 <!-- /.content-wrapper -->
 <?php
-$to = "mnabilmahat@gmail.com";
-$subject = "My subject";
-$txt = "Hello world!";
-$headers = "From: mnabilmahat@gmail.com" . "\r\n" .
-// "CC: somebodyelse@example.com";
-
-mail($to,$subject,$txt,$headers);
 include 'include/footer.php';
 ?>
