@@ -1,7 +1,8 @@
 <?php
 include 'include/header.php';
+$user_email = $_SESSION["email"];
 
-$surveyData = "SELECT * FROM surveys";
+$surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."'; ";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 ?>
@@ -50,7 +51,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
                                         echo '<td>'.$data["description"].'</td>';
                                         echo '<td>'.date_format(date_create($data['start_date']),"M d, Y").'</td>';
                                         echo '<td>'.date_format(date_create($data['end_date']),"M d, Y").'</td>';
-                                        echo '<td>100</td>';
+                                        echo '<td>'.$data["respond"].'</td>';
                                         echo '<td>';
                                         echo '<a href="surveyDetail.php?id='.$data['id'].'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>  Report</a>';
                                         echo '</td>';

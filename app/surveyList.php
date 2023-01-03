@@ -1,7 +1,9 @@
 <?php
 include 'include/header.php';
 
-$surveyData = "SELECT * FROM surveys";
+$user_email = $_SESSION["email"];
+
+$surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."' ";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 ?>
@@ -53,6 +55,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
                                         echo '<a href="surveyView.php?id='.$data["id"].'" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>';
                                         echo '<a href="surveyUpdate.php?id='.$data["id"].'" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>';
                                         echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete" onclick="deleteSurvey('.$data['id'].')"><i class="fa fa-trash-o "></i></button>';
+                                        echo '<a href="../register-survey.php?survey_id='.$data["id"].'" target="_blank" class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareSurvey('.$data['id'].')"><i class="fa fa-share-square-o "></i></a>';
                                         echo '</td>';
                                         echo '</tr>';
                                     }
@@ -83,5 +86,9 @@ function deleteSurvey(survey_id) {
   } else {
     text = "You canceled!";
   }
+}
+
+function shareSurvey(survey_id) {
+//   alert(survey_id);
 }
 </script>

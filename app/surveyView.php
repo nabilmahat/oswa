@@ -97,7 +97,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
                 $countQ = 1;
                 foreach($execQuestionData as $qRow) {
                     
-                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['id']."' ORDER BY id ASC";
+                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['question_id']."' ORDER BY id ASC";
                     $execOptionData = mysqli_query($conn, $optionData);
                     ?>
                 <div class="box box-default">

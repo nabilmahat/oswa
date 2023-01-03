@@ -18,11 +18,13 @@ $count = mysqli_num_rows($result);
 
 if($count==1){
 
+    $user_email = $row['email'];
     $username = $row['name'];
     $user_role = $row['role'];
     $user_id = $row['id'];
 
 	// set username session
+	$_SESSION['email'] = $user_email;
 	$_SESSION['name'] = $username;
 	$_SESSION['user_id'] = $user_id;
 

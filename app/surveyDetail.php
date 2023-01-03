@@ -35,8 +35,38 @@ $execQuestionData = mysqli_query($conn, $questionData);
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <!-- left column -->
-            <div class="col-md-6">
-                <!-- general form elements -->
+            <div class="col-md-12">
+
+                <!-- Filter -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Report Filtering</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control select2" style="width: 100%;">
+                                <option selected="selected">All</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Chart Type</label>
+                            <select class="form-control select2" style="width: 100%;">
+                                <option selected="selected">Pie Chart</option>
+                                <option>Bar Chart</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-success">Generate Report</button>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- End Filter -->
+
+                <!-- Survey Detail -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Survey Detail</h3>
@@ -83,11 +113,14 @@ $execQuestionData = mysqli_query($conn, $questionData);
                         <!-- /.box-body -->
                     </form>
                 </div>
+                <!-- End Survey Detail -->
+
+                <!-- Question Detail -->
                 <?php
                 $countQ = 1;
                 foreach($execQuestionData as $qRow) {
                     
-                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['id']."' ORDER BY id ASC";
+                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['question_id']."' ORDER BY id ASC";
                     $execOptionData = mysqli_query($conn, $optionData);
                     ?>
                 <div class="box box-default">
@@ -113,115 +146,88 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                     ?>
                             </p>
                         </div>
-                        <?php
-                            $totalRespond = 0;
-                            foreach($execOptionData as $oRow) {
-                                $queryAnswer = "SELECT * 
-                                                FROM answers
-                                                WHERE survey_id = '".$surveyID."'
-                                                AND question_id = '".$qRow['id']."'
-                                                AND option_id = '".$oRow['id']."'; ";
-                                $execQueryAnswer = mysqli_query($conn, $queryAnswer);
-                                $countOption = mysqli_num_rows($execQueryAnswer);
-                                $totalRespond = $totalRespond + $countOption;
-                            }
-                            foreach($execOptionData as $oRow) {
-                                    
-                            ?>
-                        <div class="form-group">
-                            <div class="box-body">
-                                <label>
-                                    <?php
-                                        echo $oRow['title']; 
-
+                        <!-- start row div -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?php
+                                    $totalRespond = 0;
+                                    foreach($execOptionData as $oRow) {
                                         $queryAnswer = "SELECT * 
                                                         FROM answers
                                                         WHERE survey_id = '".$surveyID."'
-                                                        AND question_id = '".$qRow['id']."'
+                                                        AND question_id = '".$qRow['question_id']."'
                                                         AND option_id = '".$oRow['id']."'; ";
                                         $execQueryAnswer = mysqli_query($conn, $queryAnswer);
                                         $countOption = mysqli_num_rows($execQueryAnswer);
-                                        $percentAnswer = ($countOption/$totalRespond)*100;
-                                    ?>
-                                </label>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40"
-                                        aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentAnswer; ?>%">
-                                        <?php echo number_format($percentAnswer).'%'; ?>
+                                        $totalRespond = $totalRespond + $countOption;
+                                    }
+                                    foreach($execOptionData as $oRow) {
+                                            
+                                ?>
+                                <div class="form-group">
+                                    <div class="box-body">
+                                        <label>
+                                            <?php
+                                                $percentAnswer = 0;
+                                                echo $oRow['title']; 
+
+                                                $queryAnswer = "SELECT * 
+                                                                FROM answers
+                                                                WHERE survey_id = '".$surveyID."'
+                                                                AND question_id = '".$qRow['question_id']."'
+                                                                AND option_id = '".$oRow['id']."'; ";
+                                                $execQueryAnswer = mysqli_query($conn, $queryAnswer);
+                                                $countOption = mysqli_num_rows($execQueryAnswer);
+                                                if ($countOption>0) {
+                                                    $percentAnswer = ($countOption/$totalRespond)*100;
+                                                }
+                                            ?>
+                                        </label>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40"
+                                                aria-valuemin="0" aria-valuemax="100"
+                                                style="width: <?php echo $percentAnswer; ?>%">
+                                                <?php echo number_format($percentAnswer).'%'; ?>
+                                            </div>
+                                        </div>
+                                        Count: <?php echo $countOption; ?>
                                     </div>
                                 </div>
-                                Count: <?php echo $countOption; ?>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- <div class="box-body"> -->
+                                    <canvas id="<?php echo $qRow["question_id"] ?>" style="height:250px"></canvas>
+                                <!-- </div> -->
                             </div>
                         </div>
-                        <?php
-                        }
-                            ?>
+                        <!-- end row div -->
                     </div>
                 </div>
                 <?php
                 $countQ++;
                 }
                 ?>
-            </div>
-            <div class="col-md-6">
-                <!-- Select gender and chart type -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Report Filtering</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label>Gender</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option selected="selected">All</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Chart Type</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option selected="selected">Pie Chart</option>
-                                <option>Bar Chart</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-sm btn-success">Generate Chart</button>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
+                <!-- End Question Detail -->
+
                 <!-- DONUT CHART -->
                 <div class="box box-danger">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Donut Chart</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                    class="fa fa-times"></i></button>
-                        </div>
+                        <h3 class="box-title">Gender Count</h3>
                     </div>
                     <div class="box-body">
-                        <canvas id="pieChart" style="height:250px"></canvas>
+                        <canvas id="respondentPie" style="height:250px"></canvas>
                     </div>
                     <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
+                <!-- END DONUT CHART -->
+
                 <!-- BAR CHART -->
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Bar Chart</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                    class="fa fa-times"></i></button>
-                        </div>
+                        <h3 class="box-title">Gender Percentage</h3>
                     </div>
                     <div class="box-body">
                         <div class="chart">
@@ -230,7 +236,8 @@ $execQuestionData = mysqli_query($conn, $questionData);
                     </div>
                     <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
+                <!-- END BAR CHART -->
+
             </div>
         </div>
         <!-- /.row -->
@@ -242,5 +249,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
 <?php
 include 'include/footer.php';
 ?>
+<script src="dist/js/color.js"></script>
 <script src="dist/js/pieChart.js"></script>
+<script src="dist/js/respondent.js"></script>
 <script src="dist/js/barChart.js"></script>

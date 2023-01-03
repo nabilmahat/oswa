@@ -96,13 +96,15 @@ $execQuestionPoolsData = mysqli_query($conn, $questionPoolsData);
             <!-- Survey Preview -->
 
             <!-- form start -->
-            <form role="form" action="module/questionAdd2.php" method="post">
+            <form role="form" action="module/questionGenerate.php" method="post">
+                <input type="hidden" class="form-control" id="survey_id" placeholder="Enter title" name="survey_id"
+                    required value="<?php echo $surveyID; ?>">
                 <div class="col-md-4 connectedSortable">
                     <?php
                     $countQ = 1;
                     foreach($execQuestionData as $qRow) {
                         
-                        $optionData = "SELECT * FROM options WHERE qID = '".$qRow['qID']."' ORDER BY id ASC";
+                        $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['question_id']."' ORDER BY id ASC";
                         $execOptionData = mysqli_query($conn, $optionData);
                         ?>
                     <div class="box box-default">
@@ -183,7 +185,7 @@ $execQuestionPoolsData = mysqli_query($conn, $questionPoolsData);
                 <div class="box box-default">
                     <div class="box-header with-border">
                         <h3 class="box-title">Question <?php // echo $countQ ?></h3>
-                            <input type="hidden" name="qID[]" value="<?php echo $qPRow['qID']; ?>">
+                        <input type="hidden" name="qID[]" value="<?php echo $qPRow['qID']; ?>">
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->

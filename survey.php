@@ -143,14 +143,14 @@ $execQuestionData = mysqli_query($conn, $questionData);
                 $countQ = 1;
                 foreach($execQuestionData as $qRow) {
                     
-                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['id']."' ORDER BY id ASC";
+                    $optionData = "SELECT * FROM options WHERE question_id = '".$qRow['question_id']."' ORDER BY id ASC";
                     $execOptionData = mysqli_query($conn, $optionData);
                     ?>
                             <div class="box box-default">
                                 <div class="box-header with-border text-center">
                                     <h3 class="box-title">Question <?php echo $countQ ?></h3>
                                     <input type="hidden" class="form-control" id="question_id" name="question_id"
-                                        required value="<?php echo $qRow['id']; ?>">
+                                        required value="<?php echo $qRow['question_id']; ?>">
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
@@ -178,7 +178,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                     <div class="form-group">
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="<?php echo $qRow['id']; ?>"
+                                                <input type="radio" name="<?php echo $qRow['question_id']; ?>"
                                                     id="optionsRadios1" value="<?php echo $oRow['id']; ?>"> &nbsp;&nbsp;
                                                 <?php echo $oRow['title']; ?>
                                                 <!-- <br> -->
@@ -192,7 +192,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                     <div class="form-group">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="<?php echo $qRow['id']; ?>[]"
+                                                <input type="checkbox" name="<?php echo $qRow['question_id']; ?>[]"
                                                     id="optionsRadios1" value="<?php echo $oRow['id']; ?>"> &nbsp;&nbsp;
                                                 <?php echo $oRow['title']; ?>
                                                 <!-- <br> -->
