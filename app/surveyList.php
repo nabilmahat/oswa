@@ -55,7 +55,8 @@ $surveyNum = mysqli_num_rows($execSurveyData);
                                         echo '<a href="surveyView.php?id='.$data["id"].'" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>';
                                         echo '<a href="surveyUpdate.php?id='.$data["id"].'" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>';
                                         echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete" onclick="deleteSurvey('.$data['id'].')"><i class="fa fa-trash-o "></i></button>';
-                                        echo '<a href="../register-survey.php?survey_id='.$data["id"].'" target="_blank" class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareSurvey('.$data['id'].')"><i class="fa fa-share-square-o "></i></a>';
+                                        echo '<button class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareSurvey('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-share-square-o "></i></button>';
+                                        echo '<button class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareResult('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-share-square-o "></i></button>';
                                         echo '</td>';
                                         echo '</tr>';
                                     }
@@ -88,7 +89,17 @@ function deleteSurvey(survey_id) {
   }
 }
 
-function shareSurvey(survey_id) {
-//   alert(survey_id);
+function shareSurvey(survey_id, title) {
+    var url = new URL(window.location.href)
+    var subject = 'Survey Invitation ('+title+')';
+    var body = "You are invited to answer this survey: " + url.hostname + "/owas/register-survey.php?survey_id="+survey_id;
+    window.open('mailto:?subject='+subject+'&body='+body+'');
+}
+
+function shareResult(survey_id, title) {
+    var url = new URL(window.location.href)
+    var subject = 'Survey Result ('+title+')';
+    var body = "You can view survey result here: " + url.hostname + "/owas/register-survey.php?survey_id="+survey_id;
+    window.open('mailto:?subject='+subject+'&body='+body+'');
 }
 </script>

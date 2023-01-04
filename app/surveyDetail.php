@@ -49,7 +49,8 @@ $execQuestionData = mysqli_query($conn, $questionData);
 
 @media print {
 
-    .no-print, .no-print * {
+    .no-print,
+    .no-print * {
         display: none !important;
     }
 
@@ -117,7 +118,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
             <div class="col-md-12">
 
                 <!-- Filter -->
-                <div class="box box-primary no-print">
+                <!-- <div class="box box-primary no-print">
                     <div class="box-header with-border">
                         <h3 class="box-title">Report Filtering</h3>
                     </div>
@@ -140,9 +141,8 @@ $execQuestionData = mysqli_query($conn, $questionData);
                         <div class="form-group">
                             <button type="button" class="btn btn-sm btn-success">Generate Report</button>
                         </div>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
+                    </div>                    
+                </div> -->
                 <!-- End Filter -->
 
                 <div class="form-group text-right no-print">

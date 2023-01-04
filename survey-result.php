@@ -63,82 +63,84 @@ $execQuestionData = mysqli_query($conn, $questionData);
         width: 650px;
         margin: 3% auto;
     }
+
     .chart-legend ul {
-    list-style: none;
-}
-
-.chart-legend ul li {
-    display: block;
-    padding-left: 30px;
-    position: relative;
-    margin-bottom: 4px;
-    border-radius: 5px;
-    padding: 2px 8px 2px 28px;
-    font-size: 14px;
-    cursor: default;
-    -webkit-transition: background-color 200ms ease-in-out;
-    -moz-transition: background-color 200ms ease-in-out;
-    -o-transition: background-color 200ms ease-in-out;
-    transition: background-color 200ms ease-in-out;
-}
-
-.chart-legend li span {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 100%;
-    border-radius: 5px;
-}
-
-@media print {
-
-    .no-print, .no-print * {
-        display: none !important;
+        list-style: none;
     }
 
-    .progress {
-        position: relative;
-    }
-
-    .progress:before {
+    .chart-legend ul li {
         display: block;
-        content: '';
+        padding-left: 30px;
+        position: relative;
+        margin-bottom: 4px;
+        border-radius: 5px;
+        padding: 2px 8px 2px 28px;
+        font-size: 14px;
+        cursor: default;
+        -webkit-transition: background-color 200ms ease-in-out;
+        -moz-transition: background-color 200ms ease-in-out;
+        -o-transition: background-color 200ms ease-in-out;
+        transition: background-color 200ms ease-in-out;
+    }
+
+    .chart-legend li span {
+        display: block;
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
         left: 0;
-        z-index: 0;
-        border-bottom: 2rem solid #eeeeee;
-    }
-
-    .progress-bar {
-        position: absolute;
         top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        border-bottom: 2rem solid #337ab7;
+        width: 20px;
+        height: 100%;
+        border-radius: 5px;
     }
 
-    .bg-bar-green {
-        border-bottom-color: #00a65a;
-    }
+    @media print {
 
-    .bg-info {
-        border-bottom-color: #00a65a;
-    }
+        .no-print,
+        .no-print * {
+            display: none !important;
+        }
 
-    .bg-warning {
-        border-bottom-color: #00a65a;
-    }
+        .progress {
+            position: relative;
+        }
 
-    .bg-danger {
-        border-bottom-color: #00a65a;
+        .progress:before {
+            display: block;
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+            border-bottom: 2rem solid #eeeeee;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            border-bottom: 2rem solid #337ab7;
+        }
+
+        .bg-bar-green {
+            border-bottom-color: #00a65a;
+        }
+
+        .bg-info {
+            border-bottom-color: #00a65a;
+        }
+
+        .bg-warning {
+            border-bottom-color: #00a65a;
+        }
+
+        .bg-danger {
+            border-bottom-color: #00a65a;
+        }
     }
-}
     </style>
 </head>
 
@@ -333,7 +335,8 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-primary no-print" id="printReport">Print Result</button>
+                                <button type="button" class="btn btn-primary no-print" id="printReport">Print
+                                    Result</button>
                             </div>
                         </form>
                     </div>

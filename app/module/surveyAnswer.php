@@ -57,7 +57,7 @@ if (isset($_POST["survey_id"])) {
             // echo "console.log('".$survey_id."');";
             // echo "console.log('".count($surveyRow)."');";
             echo "alert('Success Respond to Survey');";
-            echo "location.href = '../../index.php';";
+            echo "location.href = '../../survey-result.php?id=".$survey_id."';";
             echo "</script>";
 
         } else {
