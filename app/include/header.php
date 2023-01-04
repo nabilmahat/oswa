@@ -113,6 +113,7 @@ include "connection/connection.php";
                     </li>
                     <!-- User -->
                     <li class="treeview">
+                        <?php if ($_SESSION["role"] == 1) { ?>
                         <a href="#">
                             <i class="fa fa-user"></i>
                             <span>Users</span>
@@ -120,6 +121,7 @@ include "connection/connection.php";
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
+                        <?php } ?>
                         <ul class="treeview-menu">
                             <li><a href="userAdd.php"><i class="fa fa-circle-o"></i> Add New User</a></li>
                             <li><a href="userList.php"><i class="fa fa-circle-o"></i> List User</a></li>

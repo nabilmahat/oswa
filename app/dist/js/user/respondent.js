@@ -30,7 +30,7 @@ $(async function () {
     }
 
 
-    $.post("../app/module/chart/respondentData.php", {
+    $.post("app/module/chart/respondentData.php", {
         survey_id: surveyID,
     }, async function (data2) {
 

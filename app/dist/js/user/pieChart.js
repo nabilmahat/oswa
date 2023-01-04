@@ -35,14 +35,14 @@ $(async function () {
     }
 
 
-    $.post("../app/module/chart/questionList.php", {
+    $.post("app/module/chart/questionList.php", {
         survey_id: surveyID,
     }, async function (data1) {
 
         let resData1 = JSON.parse(data1);
 
         for (let q in resData1) {
-            $.post("../app/module/chart/allResult.php", {
+            $.post("app/module/chart/allResult.php", {
                 survey_id: surveyID,
                 question_id: resData1[q].question_id
             }, async function (data2) {

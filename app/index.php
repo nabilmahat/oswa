@@ -5,7 +5,7 @@ $userData = "SELECT * FROM users";
 $execUserData = mysqli_query($conn, $userData);
 $userNum = mysqli_num_rows($execUserData);
 
-$surveyData = "SELECT * FROM surveys";
+$surveyData = "SELECT * FROM surveys WHERE user_email = '".$_SESSION['email']."'";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 
@@ -28,6 +28,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
+        <?php if ($_SESSION["role"] == 1) { ?>
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-red">
@@ -44,6 +45,7 @@ $surveyNum = mysqli_num_rows($execSurveyData);
             <a href="userList.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+        <?php } ?>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
