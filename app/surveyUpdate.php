@@ -168,9 +168,11 @@ $execQuestionPoolsData = mysqli_query($conn, $questionPoolsData);
                     $countQ++;
                     }
                     ?>
+                    <?php if ($data['user_email'] == $_SESSION["email"]) { ?>
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-sm btn-success">Generate Survey</button>
                     </div>
+                    <?php } ?>
                 </div>
             </form>
             <!-- Survey Creation -->

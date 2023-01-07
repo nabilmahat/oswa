@@ -3,7 +3,14 @@ include 'include/header.php';
 
 $user_email = $_SESSION["email"];
 
-$surveyData = "SELECT * FROM surveys";
+if($_SESSION["role"]==1) {
+    // query all survey
+    $surveyData = "SELECT * FROM surveys";
+} else {
+    // query all admin and user logged in survey
+    $surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."' OR user_email = 'admin@oswa.com'; ";
+}
+
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 ?>
@@ -55,8 +62,8 @@ $surveyNum = mysqli_num_rows($execSurveyData);
                                         echo '<a href="surveyView.php?id='.$data["id"].'" class="btn btn-success btn-xs" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>';
                                         echo '<a href="surveyUpdate.php?id='.$data["id"].'" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>';
                                         echo '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" title="Delete" onclick="deleteSurvey('.$data['id'].')"><i class="fa fa-trash-o "></i></button>';
-                                        echo '<button class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareSurvey('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-share-square-o "></i></button>';
-                                        echo '<button class="btn btn-default btn-xs" data-toggle="tooltip" title="Share" onclick="shareResult('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-share-square-o "></i></button>';
+                                        echo '<button class="btn btn-default btn-xs" data-toggle="tooltip" title="Mail Survey" onclick="shareSurvey('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-bar-chart-o "></i></button>';
+                                        echo '<button class="btn btn-info btn-xs" data-toggle="tooltip" title="Mail Result" onclick="shareResult('.$data['id'].','.'`'.$data['title'].'`'.')"><i class="fa fa-share-square-o "></i></button>';
                                         echo '</td>';
                                         echo '</tr>';
                                     }

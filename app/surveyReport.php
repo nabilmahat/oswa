@@ -1,8 +1,16 @@
 <?php
 include 'include/header.php';
+
 $user_email = $_SESSION["email"];
 
-$surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."'; ";
+if($_SESSION["role"]==1) {
+    // query all survey
+    $surveyData = "SELECT * FROM surveys";
+} else {
+    // query all admin and user logged in survey
+    $surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."' OR user_email = 'admin@oswa.com'; ";
+}
+
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 ?>
