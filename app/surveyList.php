@@ -3,7 +3,7 @@ include 'include/header.php';
 
 $user_email = $_SESSION["email"];
 
-$surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."' ";
+$surveyData = "SELECT * FROM surveys";
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 ?>
