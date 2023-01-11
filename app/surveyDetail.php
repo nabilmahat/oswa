@@ -118,31 +118,33 @@ $execQuestionData = mysqli_query($conn, $questionData);
             <div class="col-md-12">
 
                 <!-- Filter -->
-                <!-- <div class="box box-primary no-print">
+                <?php if($_SESSION["role"] == 1) {?>
+                <div class="box box-primary no-print">
                     <div class="box-header with-border">
                         <h3 class="box-title">Report Filtering</h3>
                     </div>
                     <div class="box-body">
                         <div class="form-group">
                             <label>Gender</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option selected="selected">All</option>
-                                <option>Male</option>
-                                <option>Female</option>
+                            <select name="gender" id="gender" class="form-control select2" style="width: 100%;">
+                                <option selected="selected" value="all">All</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Chart Type</label>
                             <select class="form-control select2" style="width: 100%;">
                                 <option selected="selected">Pie Chart</option>
                                 <option>Bar Chart</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
-                            <button type="button" class="btn btn-sm btn-success">Generate Report</button>
+                            <button type="button" class="btn btn-sm btn-success" id="generate-report">Generate Report</button>
                         </div>
                     </div>                    
-                </div> -->
+                </div>
+                <?php } ?>
                 <!-- End Filter -->
 
                 <div class="form-group text-right no-print">
@@ -255,12 +257,31 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                                 <?php
                                                 $percentAnswer = 0;
                                                 echo $oRow['title']; 
+                                                $gender = 'all';
 
-                                                $queryAnswer = "SELECT * 
-                                                                FROM answers
-                                                                WHERE survey_id = '".$surveyID."'
-                                                                AND question_id = '".$qRow['question_id']."'
-                                                                AND option_id = '".$oRow['id']."'; ";
+                                                if(isset($_GET["gender"])) {
+                                                    $gender = $_GET["gender"];
+                                                }
+
+                                                if($gender != 'all') {
+                                                    $gender = $_GET["gender"];
+                                                    ($gender == 'male') ? $gValue = 1 : $gValue = 2;
+
+                                                    $queryAnswer = "SELECT * 
+                                                                    FROM answers
+                                                                    WHERE survey_id = '".$surveyID."'
+                                                                    AND question_id = '".$qRow['question_id']."'
+                                                                    AND option_id = '".$oRow['id']."'
+                                                                    AND gender = '".$gValue."'; ";
+                                                } else {
+
+                                                    $queryAnswer = "SELECT * 
+                                                                    FROM answers
+                                                                    WHERE survey_id = '".$surveyID."'
+                                                                    AND question_id = '".$qRow['question_id']."'
+                                                                    AND option_id = '".$oRow['id']."'; ";
+
+                                                }
                                                 $execQueryAnswer = mysqli_query($conn, $queryAnswer);
                                                 $countOption = mysqli_num_rows($execQueryAnswer);
                                                 if ($countOption>0) {
@@ -345,8 +366,23 @@ $execQuestionData = mysqli_query($conn, $questionData);
 include 'include/footer.php';
 ?>
 <script src="dist/js/color.js"></script>
-<script src="dist/js/pieChart.js"></script>
+<!-- <script src="dist/js/pieChart.js"></script> -->
+<script src="dist/js/pieChart-ori.js"></script>
 <script src="dist/js/respondent.js"></script>
 <script src="dist/js/barChart.js"></script>
 
 <script src="dist/js/printToPDF.js"></script>
+
+<script>
+$(document).ready(function(){
+  $("#generate-report").click(function(){
+    var e = document.getElementById("gender");
+    var value = e.value;    
+    
+    var href = new URL( window.location.href);
+    href.searchParams.set('gender', value);
+    // console.log(href.toString());
+    window.location.href = href;
+  });
+});
+</script>

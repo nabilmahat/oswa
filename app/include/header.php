@@ -1,5 +1,12 @@
 <?php 
 include "connection/connection.php";
+if(!isset($_SESSION['email']))
+{    
+    echo '<script language="javascript">';
+    echo 'location.href="../login.php"';
+    echo '</script>';       
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

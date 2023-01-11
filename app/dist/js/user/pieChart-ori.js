@@ -56,7 +56,7 @@ $(async function () {
         // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
         maintainAspectRatio: true,
         //String - A legend template
-        legendTemplate: css + '<ul>' + '<% for (var i=0; i<segments.length; i++) { %>' + '<li>' + '<span style=\"background-color:<%=segments[i].fillColor%>\"></span>' + '<% if (segments[i].label) { %><%= segments[i].label +" - "+ segments[i].value %><% } %>' + '</li>' + '<% } %>' + '</ul>',
+        legendTemplate: css + '<ul>' + '<% for (var i=0; i<segments.length; i++) { %>' + '<li>' + '<span style=\"background-color:<%=segments[i].fillColor%>\"></span>' + '<% if (segments[i].label) { %><%= segments[i].label +" - "+ segments[i].value +"%" %><% } %>' + '</li>' + '<% } %>' + '</ul>',
 
         legend: {
             display: true
@@ -64,46 +64,74 @@ $(async function () {
 
     }
 
-
-    $.post("../app/module/chart/questionList.php", {
+    $.post("app/module/chart/questionList.php", {
         survey_id: surveyID,
     }, async function (data1) {
 
         let resData1 = JSON.parse(data1);
+        // console.log(resData1);
 
         var paramGender = 'all';
         (gender) ? paramGender = gender : paramGender = 'all';
 
         for (let q in resData1) {
-            $.post("../app/module/chart/allResult.php", {
-                survey_id: surveyID,
-                question_id: resData1[q].question_id,
-                gender: paramGender
-            }, async function (data2) {
-                let resData2 = JSON.parse(data2);
 
-                var PieData = [];
+            var PieData = [];
 
-                for (var data in resData2) {
+            var totalAnswer = 0;
+
+            for (var data in resData1[q].option_data) {
+
+                await $.post("app/module/chart/allResult.php", {
+                    survey_id: surveyID,
+                    question_id: resData1[q].question_id,
+                    option_id: resData1[q].option_data[data].id,
+                    gender: paramGender,
+                }, async function (data2) {
+
+                    if (data2 != 0) {
+                        totalAnswer = totalAnswer + parseInt(data2);
+                    }
+
+                });
+            }
+
+            console.log(totalAnswer);
+
+            for (var data in resData1[q].option_data) {
+
+                var optionCount = 0;
+
+                await $.post("app/module/chart/allResult.php", {
+                    survey_id: surveyID,
+                    question_id: resData1[q].question_id,
+                    option_id: resData1[q].option_data[data].id,
+                    gender: paramGender,
+                }, async function (data2) {
+
+                    if (data2 != 0) {
+                        optionCount = data2;
+                    }
+
                     PieData.push({
-                        value: resData2[data].count_option,
+                        value: (optionCount / totalAnswer * 100).toFixed(2),
                         color: chartColor[data],
                         highlight: '#000000',
-                        label: resData2[data].title,
+                        label: resData1[q].option_data[data].title,
                         labelColor: 'white',
                         labelFontSize: '16'
                     });
-                }
 
-                var pieChartCanvas = $('#' + resData1[q].question_id).get(0).getContext('2d')
-                var pieChart = await new Chart(pieChartCanvas)
-                //Create pie or douhnut chart
-                // You can switch between pie and douhnut using the method below.
-                var pie = await pieChart.Doughnut(PieData, pieOptions)
-                document.getElementById(resData1[q].question_id + "-legend").innerHTML = pie.generateLegend();
-                // console.log(pieChart);
+                });
+            }
 
-            });
+            var pieChartCanvas = $('#' + resData1[q].question_id).get(0).getContext('2d')
+            var pieChart = await new Chart(pieChartCanvas)
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            var pie = await pieChart.Doughnut(PieData, pieOptions)
+            document.getElementById(resData1[q].question_id + "-legend").innerHTML = pie.generateLegend();
+            console.log(PieData);
         }
 
     });

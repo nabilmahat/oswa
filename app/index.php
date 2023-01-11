@@ -5,7 +5,11 @@ $userData = "SELECT * FROM users";
 $execUserData = mysqli_query($conn, $userData);
 $userNum = mysqli_num_rows($execUserData);
 
-$surveyData = "SELECT * FROM surveys WHERE user_email = '".$_SESSION['email']."'";
+if ($_SESSION["role"] == 2) {
+$surveyData = "SELECT * FROM surveys WHERE user_email = '".$_SESSION['email']."' OR user_email = 'admin@oswa.com'";
+} else {
+  $surveyData = "SELECT * FROM surveys";
+  }
 $execSurveyData = mysqli_query($conn, $surveyData);
 $surveyNum = mysqli_num_rows($execSurveyData);
 

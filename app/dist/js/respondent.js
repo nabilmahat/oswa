@@ -26,7 +26,7 @@ $(async function () {
         // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
         maintainAspectRatio: true,
         //String - A legend template
-        legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+        legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label +" - "+ segments[i].value + "%" %><%}%></li><%}%></ul>'
     }
 
 
@@ -38,18 +38,26 @@ $(async function () {
 
         var male = 0;
         var female = 0;
+        var totalRes = 0;
+
+        var pMale = 0;
+        var pFemale = 0;
 
         for (var data in resData2) {
             (resData2[data].gender == 1) ? male++ : female++
+            totalRes++;
         }
 
+        pMale = (male/totalRes * 100).toFixed(2);
+        pFemale = (female/totalRes * 100).toFixed(2);
+
         var PieData = [{
-            value: male,
+            value: pMale,
             color: chartColor[0],
             highlight: '#000000',
             label: 'Male'
         }, {
-            value: female,
+            value: pFemale,
             color: chartColor[1],
             highlight: '#000000',
             label: 'Female'

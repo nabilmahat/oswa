@@ -377,7 +377,8 @@ $execQuestionData = mysqli_query($conn, $questionData);
     <script src="app/bower_components/chart.js/Chart.js"></script>
 
     <script src="app/dist/js/user/color.js"></script>
-    <script src="app/dist/js/user/pieChart.js"></script>
+    <!-- <script src="app/dist/js/user/pieChart.js"></script> -->
+    <script src="app/dist/js/user/pieChart-ori.js"></script>
     <script src="app/dist/js/user/respondent.js"></script>
     <script src="app/dist/js/user/barChart.js"></script>
 
