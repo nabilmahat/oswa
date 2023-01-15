@@ -1,19 +1,17 @@
 <?php
 include 'include/header.php';
 
-if (isset($_GET['id'])){
-    $surveyID = $_GET['id'];
+if (isset($_GET['question_id'])){
+    $questionID = $_GET['question_id'];
+    $optionID = $_GET['option_id'];
+    $chart = $_GET['chart'];
 } else {
     echo "<script>";
 	echo "location.href = 'surveyList.php';";
 	echo "</script>";
 }
 
-$surveyData = "SELECT * FROM surveys WHERE id = '".$surveyID."'";
-$execSurveyData = mysqli_query($conn, $surveyData);
-$data = mysqli_fetch_array($execSurveyData);
-
-$questionData = "SELECT * FROM questions WHERE survey_id = '".$surveyID."' ORDER BY id ASC";
+$questionData = "SELECT * FROM questions WHERE question_id = '".$questionID."' ORDER BY id ASC";
 $execQuestionData = mysqli_query($conn, $questionData);
 ?>
 
@@ -117,81 +115,9 @@ $execQuestionData = mysqli_query($conn, $questionData);
             <!-- left column -->
             <div class="col-md-12">
 
-                <!-- Filter -->
-                <?php //if($_SESSION["role"] == 1) {?>
-                <!-- <div class="box box-primary no-print">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Report Filtering</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label>Gender</label>
-                            <select name="gender" id="gender" class="form-control select2" style="width: 100%;">
-                                <option selected="selected" value="all">All</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-sm btn-success" id="generate-report">Generate Report</button>
-                        </div>
-                    </div>                    
-                </div> -->
-                <?php //} ?>
-                <!-- End Filter -->
-
                 <div class="form-group text-right no-print">
                     <button class="btn btn-primary btn-sm" id="printReport">Print Result</button>
                 </div>
-
-                <!-- Survey Detail -->
-                <div class="box box-primary" id="survey-detail">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Survey Detail</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form role="form">
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <p>
-                                    <?php
-                                        echo $data['title'];
-                                    ?>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Description</label>
-                                <p>
-                                    <?php
-                                        echo $data['description'];
-                                    ?>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label>Date Start:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['start_date']),"M d, Y");
-                                    ?>
-                                </p>
-                                <!-- /.input group -->
-                            </div>
-                            <div class="form-group">
-                                <label>Date End:</label>
-                                <p>
-                                    <?php
-                                        echo date_format(date_create($data['end_date']),"M d, Y");
-                                    ?>
-                                </p>
-                                <!-- /.input group -->
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-                    </form>
-                </div>
-                <!-- End Survey Detail -->
 
                 <div id="question-detail">
                     <!-- Question Detail -->
@@ -204,29 +130,57 @@ $execQuestionData = mysqli_query($conn, $questionData);
                     ?>
                     <div class="box box-default">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Question <?php echo $countQ; ?></h3>
-                            <div class="box-tools pull-right">
-                                <button class="btn btn-info btn-sm" onclick="detailAnalysis('<?php echo $qRow['question_id']; ?>')">Detail Analysis</button>
-                            </div>
+                            <h3 class="box-title">Question Detail Analysis</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
                         <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <p>
-                                    <?php
-                                        echo $qRow['title'];
-                                    ?>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Description</label>
-                                <p>
-                                    <?php
-                                        echo $qRow['description'];
-                                    ?>
-                                </p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Title</label>
+                                    <p>
+                                        <?php
+                                            echo $qRow['title'];
+                                        ?>
+                                    </p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Description</label>
+                                        <p>
+                                            <?php
+                                                echo $qRow['description'];
+                                            ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="select_option">Filter Option</label>
+                                        <select class="form-control" name="option_id" id="option_id">
+                                            <option value="all" <?=$optionID == 'all' ? ' selected="selected"' : '';?>>All</option>
+                                            <?php
+                                            foreach($execOptionData as $oRow) {
+                                                if($optionID == $oRow["id"]) {
+                                                    echo '<option value="'.$oRow["id"].'" selected="selected">'.$oRow["title"].'</option>';
+                                                } else {
+                                                    echo '<option value="'.$oRow["id"].'">'.$oRow["title"].'</option>';
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="select_option">Chart Type</label>
+                                        <select class="form-control" name="chart_type" id="chart_type">
+                                            <option value="pie" <?=$chart == 'pie' ? ' selected="selected"' : '';?>>Pie Chart</option>
+                                            <option value="bar" <?=$chart == 'bar' ? ' selected="selected"' : '';?>>Bar Chart</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group text-right">
+                                        <button class="btn btn-sm btn-success" id="analyse">Generate Result</button>
+                                    </div>
+                                </div>
                             </div>
                             <!-- start option div -->
                             <div class="row">
@@ -237,8 +191,7 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                     foreach($execOptionData as $oRow) {
                                         $queryAnswer = "SELECT * 
                                                         FROM answers
-                                                        WHERE survey_id = '".$surveyID."'
-                                                        AND question_id = '".$qRow['question_id']."'
+                                                        WHERE question_id = '".$qRow['question_id']."'
                                                         AND option_id = '".$oRow['id']."'; ";
                                         $execQueryAnswer = mysqli_query($conn, $queryAnswer);
                                         $countOption = mysqli_num_rows($execQueryAnswer);
@@ -265,16 +218,14 @@ $execQuestionData = mysqli_query($conn, $questionData);
 
                                                     $queryAnswer = "SELECT * 
                                                                     FROM answers
-                                                                    WHERE survey_id = '".$surveyID."'
-                                                                    AND question_id = '".$qRow['question_id']."'
+                                                                    WHERE question_id = '".$qRow['question_id']."'
                                                                     AND option_id = '".$oRow['id']."'
                                                                     AND gender = '".$gValue."'; ";
                                                 } else {
 
                                                     $queryAnswer = "SELECT * 
                                                                     FROM answers
-                                                                    WHERE survey_id = '".$surveyID."'
-                                                                    AND question_id = '".$qRow['question_id']."'
+                                                                    WHERE question_id = '".$qRow['question_id']."'
                                                                     AND option_id = '".$oRow['id']."'; ";
 
                                                 }
@@ -300,12 +251,18 @@ $execQuestionData = mysqli_query($conn, $questionData);
                                 ?>
                                 </div>
                                 <!-- graph -->
+                                <?php if ($chart == "pie") {?>
                                 <div class="col-md-6">
-                                    <!-- <div class="box-body"> -->
                                     <canvas id="<?php echo $qRow["question_id"] ?>" style="height:250px"></canvas>
                                     <div id="<?php echo $qRow["question_id"] ?>-legend" class="chart-legend"></div>
                                     <!-- </div> -->
                                 </div>
+                                <?php } else if ($chart == "bar") {?>
+                                <div class="col-md-6">
+                                    <canvas id="barChartData" style="height:250px"></canvas>
+                                    <!-- </div> -->
+                                </div>
+                                <?php } ?>
                             </div>
                             <!-- end option div -->
                         </div>
@@ -315,39 +272,6 @@ $execQuestionData = mysqli_query($conn, $questionData);
                 }
                 ?>
                     <!-- End Question Detail -->
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <!-- DONUT CHART -->
-                        <div class="box box-danger">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Gender Count</h3>
-                            </div>
-                            <div class="box-body" id="res">
-                                <canvas id="respondentPie" style="height:250px"></canvas>
-                                <div id="respondent-legend" class="chart-legend"></div>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- END DONUT CHART -->
-                    </div>
-                    <div class="col-md-6">
-
-                        <!-- BAR CHART -->
-                        <div class="box box-success">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Gender Percentage (%)</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="chart">
-                                    <canvas id="barChart" style="height:250px"></canvas>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- END BAR CHART -->
-                    </div>
                 </div>
 
             </div>
@@ -363,9 +287,8 @@ include 'include/footer.php';
 ?>
 <script src="dist/js/color.js"></script>
 <!-- <script src="dist/js/pieChart.js"></script> -->
-<script src="dist/js/pieChart-ori.js"></script>
-<script src="dist/js/respondent.js"></script>
-<script src="dist/js/barChart.js"></script>
+<script src="dist/js/pieChart-analysis.js"></script>
+<script src="dist/js/barChart-analysis.js"></script>
 
 <script src="dist/js/printToPDF.js"></script>
 
@@ -380,9 +303,23 @@ $(document).ready(function(){
     // console.log(href.toString());
     window.location.href = href;
   });
+
+
+$("#analyse").click(function(){
+    var e = document.getElementById("chart_type");
+    var opt = document.getElementById("option_id");
+    var value = e.value;    
+    var valueOption = opt.value;    
+    
+    var href = new URL( window.location.href);
+    href.searchParams.set('chart', value);
+    href.searchParams.set('option_id', valueOption);
+    // console.log(href.toString());
+    window.location.href = href;
+  });
 });
 
 function detailAnalysis(qID) {
-    window.location.href = 'surveyDetailAnalysis.php?chart=pie&question_id=' + qID + '&option_id=all';
+    alert(qID);
 }
 </script>
