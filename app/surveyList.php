@@ -8,7 +8,10 @@ if($_SESSION["role"]==1) {
     $surveyData = "SELECT * FROM surveys";
 } else {
     // query all admin and user logged in survey
-    $surveyData = "SELECT * FROM surveys WHERE user_email = '".$user_email."' OR user_email = 'admin@oswa.com'; ";
+    $surveyData = "SELECT * 
+                FROM surveys 
+                WHERE user_email = '".$user_email."' 
+                OR user_email IN(SELECT email FROM users WHERE role = 1); ";
 }
 
 $execSurveyData = mysqli_query($conn, $surveyData);
@@ -99,14 +102,14 @@ function deleteSurvey(survey_id) {
 function shareSurvey(survey_id, title) {
     var url = new URL(window.location.href)
     var subject = 'Survey Invitation ('+title+')';
-    var body = "You are invited to answer this survey: " + url.hostname + "/owas/register-survey.php?survey_id="+survey_id;
+    var body = "You are invited to answer this survey: " + url.hostname + "/register-survey.php?survey_id="+survey_id;
     window.open('mailto:?subject='+subject+'&body='+body+'');
 }
 
 function shareResult(survey_id, title) {
     var url = new URL(window.location.href)
     var subject = 'Survey Result ('+title+')';
-    var body = "You can view survey result here: " + url.hostname + "/owas/register-survey.php?survey_id="+survey_id;
+    var body = "You can view survey result here: " + url.hostname + "/register-survey.php?survey_id="+survey_id;
     window.open('mailto:?subject='+subject+'&body='+body+'');
 }
 </script>
